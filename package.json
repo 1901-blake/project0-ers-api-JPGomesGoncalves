@@ -4,7 +4,7 @@
   "description": "\"project 0 Expense Reimbursement System\"",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node src/Main.ts",
+    "start": "ts-node src/Index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -20,7 +20,8 @@
   "dependencies": {
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
-    "express-session": "^1.15.6"
+    "express-session": "^1.15.6",
+    "pg": "^7.8.0"
   },
   "devDependencies": {
     "@types/express": "^4.16.0",

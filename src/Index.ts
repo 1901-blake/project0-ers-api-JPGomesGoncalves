@@ -1,7 +1,8 @@
 import express from 'express'
 import bodyParser from 'body-parser';
 import session from 'express-session';
-import { userRouter } from './Routers/User.Router';
+import { userRouter } from './Main/Routers/User.Router';
+import {UserDao} from './Main/Dao/UserDoa';
 //Databasename/ hostname : password/ endpoint
 const app = express();
 
