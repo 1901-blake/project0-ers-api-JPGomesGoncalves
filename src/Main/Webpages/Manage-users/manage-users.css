@@ -1,0 +1,7 @@
+.Table_display {
+    width: 100%;
+    max-width: 330px;
+    padding: 15px;
+    border: solid black 1px;
+    border-collapse: collapse;
+  }
