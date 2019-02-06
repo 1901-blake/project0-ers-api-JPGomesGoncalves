@@ -2,12 +2,16 @@ import express from 'express'
 import bodyParser from 'body-parser';
 import session from 'express-session';
 import { userRouter } from './Main/Routers/User.Router';
+import { reimbursementRouter } from './Main/Routers/Reimbursement.Router';
 import { UserDao } from './Main/Dao/UserDoa';
 import { RoleDoa } from './Main/Dao/RoleDoa';
+import { ReimbursementDao } from './Main/Dao/ReimbursementDoa';
 //Databasename/ hostname : password/ endpoint
 const app = express();
-export let userdoa = new UserDao();
-export let roledoa = new RoleDoa();
+export const userdoa = new UserDao();
+export const roledoa = new RoleDoa();
+export const reimbursementsdoa = new ReimbursementDao();
+
 
 app.use(bodyParser.json());
 
@@ -37,7 +41,9 @@ app.use((req, resp, next) => {
     next();
    });
    
-app.use('/project0',userRouter);
+app.use('/users',userRouter);
+app.use('/reimbursements',reimbursementRouter);
+
 
 app.listen(3000);
 console.log('application started on port: 3000');

@@ -1,7 +1,8 @@
 import express from 'express';
-import { ReimbursementDao } from '../Dao/ReimbursementDoa';
-import {userdoa} from '../../Index'
-import {roledoa} from '../../Index'
+import { userdoa } from '../../Index'
+import { roledoa } from '../../Index'
+import { AdminMiddleware } from '../middleware/Adminmiddleware';
+import { FindUserMiddleware } from '../middleware/FindUserMiddleware';
 
 
 // ask about letters in the timestamps for the Reimbursement
@@ -12,34 +13,20 @@ export const userRouter = express.Router();
 /*Find Users Done
 URL: /users
 Method: GET
-Allowed Roles finance-manager
+Allowed Roles finance-manager, admin
 find all user
 */
-userRouter.get('/users', async (req, res) => {
+userRouter.get('', [FindUserMiddleware], async (req, res) => {
 
     try {
-        const userinfo = req.session.user;
-        let testsucceded = false;
+        console.log('Getting all Users in (Get User Function)'); console.log();
+        const result = await userdoa.getAllUser();
+        console.log('Finished Getting all Users in (Get User Function)'); console.log();
+        
+        //console.log('session user value: ' + req.session.user);
 
-
-        console.log('Finding Role of User in (Get User Function)');
-        const role = await roledoa.findRoleById(userinfo.roleid);
-        console.log('Finished Role of User in (Get User Function)');
-
-        if (userinfo && await role.role === 'finance-manager') {
-            console.log('Getting all Users in (Get User Function)'); console.log();
-            const result = await userdoa.getAllUser();
-            console.log('Finished Getting all Users in (Get User Function)'); console.log();
-            testsucceded = true;
-            res.json(result);
-        } else {
-            testsucceded = true;
-            res.send('Invalid Role');
-        }
-
-        if (testsucceded != true) {
-            res.send('Finding User was skipped FIX THIS')
-        }
+        res.json(result);
+        //res.sendStatus(200);
 
     } catch (e) {
         req.next(e);
@@ -51,38 +38,15 @@ userRouter.get('/users', async (req, res) => {
 /*Find Users By Id Done
 URL /users/:id
 Method: GET
-Allowed Roles finance-manager or if the id provided matches the id of the current user
+Allowed Roles finance-manager, admin or if the id provided matches the id of the current user
 Response:*/
-userRouter.get('/users/:id', async (req, res) => {
-
+userRouter.get('/:id', [FindUserMiddleware], async (req, res) => {
     try {
-        const userinfo = req.session.user;
-        let testsucceded = false;
 
-        console.log('Finding Role of User in (Get User ID Function)');
-        const role = await roledoa.findRoleById(userinfo.roleid);
-        console.log('Finshed Role of User in (Get User ID Function)');
-
-        if (userinfo && role.role === 'finance-manager') {
-            console.log('Finding Users for finance-manager in (Get User ID Function)'); console.log();
-            const result = await userdoa.findUserById(req.params.id);
-            console.log(result + 'Finshed finding User for finance-manager in (Get User ID Function)'); console.log();
-            testsucceded = true;
-            res.json(result);
-        } else if (userinfo && userinfo.userid === +req.params.id) {
-            console.log('Finding Users for admin or lower in (Get User ID Function)');
-            const result = await userdoa.findUserById(userinfo.userid);
-            console.log('Finshed finding Users for admin or lower in (Get User ID Function)'); console.log();
-            testsucceded = true;
-            res.json(result);
-        } else {
-            testsucceded = true;
-            res.send('Invalid Role or ID Number');
-        }
-
-        if (testsucceded != true) {
-            res.send('User ID Function was Skipped FIX THIS');
-        }
+        console.log('Finding Users for finance-manager in (Get User ID Function)'); console.log();
+        const result = await userdoa.findUserById(req.params.id);
+        console.log(result + 'Finshed finding User for finance-manager in (Get User ID Function)'); console.log();
+        res.json(result);
 
     } catch (error) {
         req.next(error);
@@ -95,29 +59,11 @@ Method: PATCH
 Allowed Roles: admin, finance-manager
 Request The userId must be presen as well as all fields to update, any field left undefined will not be updated.
 */
-userRouter.patch('/users', async (req, res) => {
+userRouter.patch('', [AdminMiddleware], async (req, res) => {
     try {
 
-        const userinfo = req.session.user;
-        const reimbursementsdoa = new ReimbursementDao();
-
-
-        console.log(userinfo);
-
-        const role = await roledoa.findRoleById(userinfo.roleid);
-        console.log(role);
-
-        if (userinfo && role.role === 'finance-manager') {
-            const info = await reimbursementsdoa.UpdateReimbursement(+req.body.reimbursmentid, +req.body.author, +req.body.amount, req.body.datesubmitted, req.body.dateresolved, req.body.description, +req.body.resolver, +req.body.status, +req.body.type);
-            res.json(info);
-        } else if (userinfo && role.role === 'admin') {
-            const result = await userdoa.userUpdate(+req.body.userid, req.body.username, req.body.password, req.body.firstName, req.body.lastName, req.body.email, +req.body.roleId);
+            const result = await userdoa.userUpdate(+req.body.userid, req.body.username, req.body.password, req.body.firstname || req.body.firstName, req.body.lastname, req.body.email, +req.body.roleId || +req.body.roleId);
             res.json(result);
-        } else {
-            res.send('Invalid Role');
-        }
-
-
 
     } catch (e) {
         req.next(e);
@@ -159,15 +105,25 @@ userRouter.post('/login', async (req, res) => {
             tempuserdisplay.role = role.role;
 
             req.session.user = user;
-            if (user.username === req.body.username && user.password === req.body.password) {
-                res.json(tempuserdisplay);
+            req.session.role = role;
 
-            } else {
-                res.json(tempuserdisplay);
-            }
+            // console.log(user);
+            // console.log(req.body.username);
+            // console.log(req.body.password);
+            // console.log('session user value: ' + req.session.user);
+            // console.log(`session userid value: ${req.session.user.userid}
+            // session username value: ${req.session.user.username} 
+            // session firstname value: ${req.session.user.firstname}
+            // session lastname value: ${req.session.user.lastname}
+            // session email value: ${req.session.user.email}
+            // session role value: ${req.session.user.roleid}`);
+            // console.log(`session roleid value: ${req.session.role.roleid}
+            //              session role value: ${req.session.role.role}`);
+            
+
+            res.json(tempuserdisplay);
         } else {
-            // res.send('Invalid username or password');
-            res.sendStatus(400);
+            res.status(400).send('Invalid username or password');
         }
 
     } catch (e) {
@@ -175,95 +131,3 @@ userRouter.post('/login', async (req, res) => {
     }
 });
 
-/*Find Reimbursements By Status Done
-Reimbursements should be ordered by date
-URL: /reimbursements/status/:statusId
-For a challenge you could do this instead: /reimbursements/status/:statudId/date-submitted?start=:startDate&end=:endDate
-Method: GET
-Allowed Roles: finance-manager
-Response:
-*/
-userRouter.get('/reimbursements/status/:statusId', async (req, res) => {
-    try {
-        const userinfo = req.session.user;
-        const reimbursementsdoa = new ReimbursementDao();
-
-        const role = await roledoa.findRoleById(userinfo.userid);
-
-        if (userinfo && role.role === 'finance-manager') {
-            const info = await reimbursementsdoa.findReimbursementByStatus(+req.params.statusId);
-            res.json(info);
-        } else {
-            res.send('Invalid Role or ID Number');
-        }
-    } catch (error) {
-        req.next(error);
-    }
-
-});
-
-/*Find Reimbursements By User Done
-Reimbursements should be ordered by date
-URL: /reimbursements/author/userId/:userId
-For a challenge you could do this instead: /reimbursements/author/userId/:userId/date-submitted?start=:startDate&end=:endDate
-Method: GET
-Allowed Roles: finance-manager or if ther userId is the user making the request.*/
-userRouter.get('/reimbursements/author/userId/:userId', async (req, res) => {
-
-    try {
-        const userinfo = req.session.user;
-        const reimbursementsdoa = new ReimbursementDao();
-
-        const role = await roledoa.findRoleById(userinfo.userid);
-
-        if (userinfo && role.role === 'finance-manager') {
-            //const info = reimbursementInfoArr.find(ele => ele.reimbursementId === +req.params.userId);
-            const info = await reimbursementsdoa.findReimbursementByUserId(+req.params.userId);
-            console.log(info);
-            res.json(info);
-        } else if (userinfo && userinfo.userid === +req.params.userId) {
-            //const info = reimbursementInfoArr.find(ele => ele.reimbursementId === userinfo.userId);
-            const info = await reimbursementsdoa.findReimbursementByUserId(userinfo.userid);
-            console.log(info);
-            res.json(info);
-        } else {
-            res.send('Invalid Role or ID Number');
-        }
-    } catch (error) {
-        req.next(error);
-    }
-
-});
-
-/*Submit Reimbursement Needs work
-URL /reimbursements
-Method: POST
-Rquest: The reimbursementId should be 0
-Response: Status Code 201 CREATED*/
-userRouter.post('/reimbursements', async (req, res) => {
-    /*    reimbursementId: 0, // primary key
-    author: 0,  // foreign key -> User, not null
-    amount: 0,  // not null
-    dateSubmitted: 0, // not null
-    dateResolved: 0, // not null
-    description: 'not filled', // not null
-    resolver: 0, // foreign key -> User
-    status: 0, // foreign key -> ReimbursementStatus, not null
-    type: 0 // foreign key -> ReimbursementType*/
-
-
-
-    try {
-
-        const userinfo = req.session.user;
-        const reimbursementsdoa = new ReimbursementDao();
-
-        let result = await reimbursementsdoa.SubmitReimbursement(+req.body.reimbursmentid, +req.body.author, +req.body.amount, req.body.datesubmitted, req.body.dateresolved, req.body.description, +req.body.resolver, +req.body.status, +req.body.type)
-
-        res.send(result);
-
-    } catch (error) {
-        req.next(error);
-    }
-
-});
