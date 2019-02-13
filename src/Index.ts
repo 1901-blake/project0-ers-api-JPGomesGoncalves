@@ -38,6 +38,7 @@ app.use((req, resp, next) => {
       : resp.header('Access-Control-Allow-Origin', `http://localhost:5500`);
     resp.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
     resp.header('Access-Control-Allow-Credentials', 'true');
+    resp.header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
     next();
    });
    

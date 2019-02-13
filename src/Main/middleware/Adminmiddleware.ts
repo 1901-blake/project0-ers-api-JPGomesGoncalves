@@ -1,7 +1,7 @@
 export function AdminMiddleware(req, res, next) {
     const user = req.session.user;
     const role = req.session.role;
-    console.log("Entered login middleware " + req.params.id);
+    console.log("Entered Patch middleware with a user of: " + role.role);
 
     // let acceptedroles = ['admin'];
 

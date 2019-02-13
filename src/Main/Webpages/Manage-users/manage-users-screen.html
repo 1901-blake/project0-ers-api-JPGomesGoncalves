@@ -9,39 +9,141 @@
     <link rel="stylesheet" type="text/css" media="screen" href="manage-users.css" />
 </head>
 
-<body>
-    <h1>You Did It</h1>
+<body class="Mainbackground">
+    <div class="outer">
+        <div class="middle">
+            <div class="inner">
 
-    <div>
-        <button onclick="table_users()">Users</button>
-        <table id="User_table" class="Table_display">
-            <tr >
-                <th class="Table_display" id="User_id">User_id</th>
-                <th class="Table_display" id="username">username</th>
-                <th class="Table_display" id="firstname">firstname</th>
-                <th class="Table_display" id="lastname">lastname</th>
-                <th class="Table_display" id="email">email</th>
-                <th class="Table_display" id="roleid">roleid</th>
-            </tr>
-        </table>
+
+                <!-- tab Button -->
+                <div class="tab" id="Tabdiv">
+                    <button class="tablinks" id="User_button_tab" onclick="openCity(event, 'User_tab')">Users</button>
+                    <button class="tablinks" id="Reimbursment_button_tab"
+                        onclick="openCity(event, 'Reimbursment_tab')">Reimbursements</button>
+                    <button class="tablinks" onclick="openCity(event, 'My_profile_tab')">Myprofile</button>
+                    <button class="tablinks" onclick="openCity(event, 'My_Reimbursment_tab')">MyReimbursment</button>
+
+                </div>
+
+                <!-- tab Contents -->
+                <div>
+                    <div id="User_tab" class="tabcontent">
+                        <!-- this should show a table that will have a input to find the userid(if null then show all users) -->
+                        <!-- the table should have the user information(can only change for admin) and a button to update the user -->
+                        <form action="" class="inputstyle">
+                            <input type="number" id="UserFilter" placeholder="Filter" ">
+                            <button onclick=" FilterUser(event)">Filter</button>
+                        </form>
+                        <table id="User_table" class="Table_display">
+                            <tr>
+                                <th class="Table_display" id="User_id">User_id</th>
+                                <th class="Table_display" id="username">username</th>
+                                <th class="Table_display" id="firstname">firstname</th>
+                                <th class="Table_display" id="lastname">lastname</th>
+                                <th class="Table_display" id="email">email</th>
+                                <th class="Table_display" id="roleid">roleid</th>
+                                <th class="Table_display" id="UpdateUser">Update</th>
+
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div id="Reimbursment_tab" class="tabcontent">
+
+                        <form action="" class="inputstyle">
+                            <input type="number" id="ReimbursmentIdFilter" placeholder="Filter">
+                            <select name="" id="ReimbursmentSatusFilter">
+                                <option value="All">All</option>
+                                <option value="Pending">Pending</option>
+                                <option value="Approved">Approved</option>
+                                <option value="Declined">Declined</option>
+                            </select>
+                            <button onclick="FilterReimbursment(event)">Filter</button>
+                            <p id="Reimbursment_Invalid_Role"></p>
+                        </form>
+
+                        <table id="Reimbursment_table" class="Table_display">
+                            <tr>
+                                <th class="Table_display" id="reimbursmentid">reimbursmentid</th>
+                                <th class="Table_display" id="author">author</th>
+                                <th class="Table_display" id="amount">amount</th>
+                                <th class="Table_display" id="datesubmitted">datesubmitted</th>
+                                <th class="Table_display" id="dateresolved">dateresolved</th>
+                                <th class="Table_display" id="description">description</th>
+                                <th class="Table_display" id="resolver">resolver</th>
+                                <th class="Table_display" id="status">status</th>
+                                <th class="Table_display" id="type">type</th>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div id="My_profile_tab" class="tabcontent">
+                        <table id="My_User_table" class="Table_display">
+                            <tr>
+                                <th class="Table_display" id="User_id">User_id</th>
+                                <th class="Table_display" id="username">username</th>
+                                <th class="Table_display" id="firstname">firstname</th>
+                                <th class="Table_display" id="lastname">lastname</th>
+                                <th class="Table_display" id="email">email</th>
+                                <th class="Table_display" id="roleid">roleid</th>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div id="My_Reimbursment_tab" class="tabcontent">
+
+                        <table id="My_Submit_Reimbursment_table" class="Reimbursment_Table_display">
+                            <tr>
+                                <th class="Table_display">amount</th>
+                                <th class="Table_display">datesubmitted</th>
+                                <th class="Table_display">description</th>
+                                <th class="Table_display">type</th>
+                                <th class="Table_display">Submit</th>
+
+                            </tr>
+                            <tr>
+                                <td class="Table_display"><input type="number" placeholder="amount" id="submit_amount">
+                                </td>
+                                <td class="Table_display"><input type="date" placeholder="2019-01-15" id="submit_date"
+                                        required>
+                                </td>
+                                <td class="Table_display"><input type="text" placeholder="description"
+                                        id="submit_description" required></td>
+                                <td class="Table_display">
+                                    <select name="" id="submit_type">
+                                        <option value="Lodging">Lodging</option>
+                                        <option value="Travel">Travel</option>
+                                        <option value="Food">Food</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </td>
+                                <td class="Table_display" id="submit_button" onclick="Submit_Reimbursment()">
+                                    <button>submit</button>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <table id="My_Reimbursment_table" class="Table_display">
+                            <tr>
+                                <th class="Table_display">reimbursmentid</th>
+                                <th class="Table_display">author</th>
+                                <th class="Table_display">amount</th>
+                                <th class="Table_display">datesubmitted</th>
+                                <th class="Table_display">dateresolved</th>
+                                <th class="Table_display">description</th>
+                                <th class="Table_display">resolver</th>
+                                <th class="Table_display">status</th>
+                                <th class="Table_display">type</th>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
     </div>
 
-    <div>
-        <button>Reimburstments</button>
-        <table class="Table_display">
-            <tr>
-                <th class="Table_display" id="reimbursmentid">reimbursmentid</th>
-                <th class="Table_display" id="author">author</th>
-                <th class="Table_display" id="amount">amount</th>
-                <th class="Table_display" id="dateSubmitted">dateSubmitted</th>
-                <th class="Table_display" id="dateResolved">dateResolved</th>
-                <th class="Table_display" id="description">description</th>
-                <th class="Table_display" id="resolver">resolver</th>
-                <th class="Table_display" id="status">status</th>
-                <th class="Table_display" id="type">type</th>
-            </tr>
-        </table>
-    </div>
 </body>
 <script src="manage-users.js"></script>
 

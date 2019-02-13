@@ -11,7 +11,7 @@ export class UserDao{
         console.log("Finshed pool conenct in (GetAllUser Function)");
 
         console.log("Entering client.query(SELECT * from User;) in (GetAllUser Function)");
-        const result = await  client.query('SELECT * from "User";');
+        const result = await  client.query('SELECT * from "User" order by userid;');
         console.log("Finshed client.query(SELECT * from User;) in (GetAllUser Function)");console.log();
         console.log(result.rows);
         client.release();

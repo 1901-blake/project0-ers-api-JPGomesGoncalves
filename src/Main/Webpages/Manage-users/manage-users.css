@@ -1,3 +1,7 @@
+.Mainbackground{
+  background-color: #ccc;
+}
+
 .Table_display {
     width: 100%;
     max-width: 330px;
@@ -5,3 +9,107 @@
     border: solid black 1px;
     border-collapse: collapse;
   }
+
+  .Reimbursment_Table_display {
+    width: 100%;
+    max-width: 330px;
+    padding: 15px;
+    border: solid black 1px;
+    border-collapse: collapse;
+    margin-bottom: 22px;
+  }
+
+/* Style the tab */
+.tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  width: 1174px;
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffaf4b+31,ff920a+73,ff920a+96 */
+background: #ffaf4b; /* Old browsers */
+background: -moz-linear-gradient(top, #ffaf4b 31%, #ff920a 73%, #ff920a 96%); /* FF3.6-15 */
+background: -webkit-linear-gradient(top, #ffaf4b 31%,#ff920a 73%,#ff920a 96%); /* Chrome10-25,Safari5.1-6 */
+background: linear-gradient(to bottom, #ffaf4b 31%,#ff920a 73%,#ff920a 96%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffaf4b', endColorstr='#ff920a',GradientType=0 ); /* IE6-9 */
+}
+
+/* Style the buttons that are used to open the tab content */
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  /* background-color: #ddd; */
+
+/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ff920a+42,ffd4a0+89 */
+background: rgb(255,146,10); /* Old browsers */
+background: -moz-linear-gradient(top, rgba(255,146,10,1) 42%, rgba(255,212,160,1) 89%); /* FF3.6-15 */
+background: -webkit-linear-gradient(top, rgba(255,146,10,1) 42%,rgba(255,212,160,1) 89%); /* Chrome10-25,Safari5.1-6 */
+background: linear-gradient(to bottom, rgba(255,146,10,1) 42%,rgba(255,212,160,1) 89%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff920a', endColorstr='#ffd4a0',GradientType=0 ); /* IE6-9 */
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ff920a+2,ffd4a0+39 */
+background: #ff920a; /* Old browsers */
+background: -moz-linear-gradient(top, #ff920a 2%, #ffd4a0 39%); /* FF3.6-15 */
+background: -webkit-linear-gradient(top, #ff920a 2%,#ffd4a0 39%); /* Chrome10-25,Safari5.1-6 */
+background: linear-gradient(to bottom, #ff920a 2%,#ffd4a0 39%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff920a', endColorstr='#ffd4a0',GradientType=0 ); /* IE6-9 */
+
+}
+.tab button.inactiveactive {
+  background-color: inherit;
+}
+
+/* Style the tab content */
+.tabcontent {
+  position: fixed;
+  width: 1150px;
+
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
+  background-color: rgb(239, 235, 235);
+}
+
+.inputerror{
+  border: 2px solid red;
+  /* border-color: red; */
+  outline: none;
+}
+
+.inputstyle{
+  padding-bottom: 4mm;
+}
+
+
+
+.outer {
+  display: table;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 35%;
+  width: 100%;
+}
+
+.middle {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.inner {
+  margin-left: auto;
+  margin-right: auto;
+  width: 1100px;
+  /*whatever width you want*/
+}

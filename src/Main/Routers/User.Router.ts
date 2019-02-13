@@ -22,7 +22,7 @@ userRouter.get('', [FindUserMiddleware], async (req, res) => {
         console.log('Getting all Users in (Get User Function)'); console.log();
         const result = await userdoa.getAllUser();
         console.log('Finished Getting all Users in (Get User Function)'); console.log();
-        
+
         //console.log('session user value: ' + req.session.user);
 
         res.json(result);
@@ -60,12 +60,14 @@ Allowed Roles: admin, finance-manager
 Request The userId must be presen as well as all fields to update, any field left undefined will not be updated.
 */
 userRouter.patch('', [AdminMiddleware], async (req, res) => {
+    console.log('Started in Update Users');
     try {
-
-            const result = await userdoa.userUpdate(+req.body.userid, req.body.username, req.body.password, req.body.firstname || req.body.firstName, req.body.lastname, req.body.email, +req.body.roleId || +req.body.roleId);
-            res.json(result);
+        console.log('Entered try block in Update Users');
+        const result = await userdoa.userUpdate(+req.body.userid, req.body.username, req.body.password, req.body.firstname || req.body.firstName, req.body.lastname, req.body.email, +req.body.roleId || +req.body.roleid);
+        res.json(result);
 
     } catch (e) {
+        console.log('somehting went wrong in Update Users')
         req.next(e);
     }
 });
@@ -119,7 +121,7 @@ userRouter.post('/login', async (req, res) => {
             // session role value: ${req.session.user.roleid}`);
             // console.log(`session roleid value: ${req.session.role.roleid}
             //              session role value: ${req.session.role.role}`);
-            
+
 
             res.json(tempuserdisplay);
         } else {

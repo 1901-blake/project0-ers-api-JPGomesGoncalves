@@ -16,6 +16,7 @@ export function FindUserMiddleware(req, res, next) {
         }
     }else{
         console.log('need to log in FindUserMiddleware ');
+        res.status(400);
         res.send("Need to login");
 
     }

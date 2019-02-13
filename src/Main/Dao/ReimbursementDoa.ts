@@ -31,12 +31,13 @@ export class ReimbursementDao{
 
     public async findReimbursementByStatus(id : number): Promise<Reimbursement[]> {
 
+        console.log('findReimbursementByStatus value : '+id)
         let pool = SessionFactory.getConnectionPool();
 
         const client = await  pool.connect();
 
         const result = await  client.query(`select * from Reimbursement where status = $1 order by datesubmitted desc;`,[id]);
-
+        console.log(typeof(result.rows));
         client.release();
 
         return result.rows;
@@ -67,8 +68,8 @@ export class ReimbursementDao{
 
         const result = await  client.query(`update reimbursement
          set reimbursmentid = $1, author = $2, amount = $3, datesubmitted = $4, 
-         dateresolved = $5,description = $6, resolver = $7, status = $8, "type" = $9
-         where reimbursmentid = $1 returning *;`,[reimbursmentid ,author,amount,dateSubmitted,dateResolved,description,resolver,status,type]);
+         dateresolved = NOW(),description = $5, resolver = $6, status = $7, "type" = $8
+         where reimbursmentid = $1 returning *;`,[reimbursmentid ,author,amount,dateSubmitted,description,resolver,status,type]);
 
         client.release();
 

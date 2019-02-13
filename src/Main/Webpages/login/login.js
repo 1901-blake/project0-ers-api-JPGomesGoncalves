@@ -21,7 +21,12 @@ async function Signin(event) {
   })
   console.log('passed fecth');
   if (result.status === 200) {
+
     console.log('Found User');
+
+    let body = await result.json();
+    localStorage.setItem('session', JSON.stringify(body));
+
     window.location = '../Manage-users/manage-users-screen.html';
   } else {
     console.log('failed to log in');
